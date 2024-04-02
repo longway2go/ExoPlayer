@@ -243,7 +243,7 @@ public class PlayerActivity extends AppCompatActivity
   @Override
   public boolean dispatchKeyEvent(KeyEvent event) {
     // See whether the player view wants to handle media or DPAD keys events.
-    Log.i(TAG, "dispatchKeyEvent", event);
+    Log.i(TAG, "dispatchKeyEvent " + event);
     return playerView.dispatchKeyEvent(event) || super.dispatchKeyEvent(event);
   }
 
@@ -501,7 +501,7 @@ public class PlayerActivity extends AppCompatActivity
   }
 
   private void showToast(String message) {
-    Log.i(TAG, "showToast", message);
+    Log.i(TAG, "showToast: " + message);
     Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
   }
 

@@ -67,32 +67,41 @@
 
     <!-- 这段代码定义了一个用于播放媒体内容的 Activity (PlayerActivity)。该 Activity 可以通过多种方式启动，例如通过其他 Activity 发送自定义 Intent 或通过 Intent 过滤器来响应其他应用发起的播放请求。它可以播放来自网络、本地文件、内容提供商和应用内部资源的媒体内容。 -->
     <!-- android:name用于指定Activity类名，这里是：com.google.android.exoplayer2.demo.PlayerActivity -->
-    <activity android:name=".PlayerActivity"
+
       <!-- android:configChanges用于指定Activity在某些配置发生变化时不需要重新创建。 -->
       <!-- 这里，当键盘弹出/隐藏、设备旋转、屏幕尺寸/布局变化、UI模式改变等情况发生时，Activity不会被销毁和重建，而是会收到相应的回调函数，让Activity能根据变化进行调整。 -->
-        android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+
       <!-- android:launchMode用于指定Activity的启动模式。 -->
       <!-- 这里设置为singleTop,表示当该Activity已经在任务栈顶端时，再次启动它不会创建一个实例，而是会将当前的实例移到最前端。 -->
-        android:launchMode="singleTop"
+
       <!-- 用于指定Activity在应用列表中显示的标题。 -->
-        android:label="@string/application_name"
+
       <!-- 用于指定Activity使用的主题。 -->
-        android:theme="@style/PlayerTheme"
+
       <!-- android:exported用于指定Activity是否可以被其他应用通过Intent启动。 -->
       <!-- 这里设置为true，表示该Activity可以被其他应用启动。 -->
-        android:exported="true">
+
       <!-- intent-filter标签用于定义Activity可以响应的Intent过滤器。 -->
       <!-- 一个Activity可以有多个Intent过滤器，用于匹配不同的启动方式。 -->
-      <intent-filter>
+
         <!-- android:action 属性: 指定该过滤器可以响应的 Intent 的 action。 -->
         <!-- 这里值为 com.google.android.exoplayer.demo.action.VIEW，这是一个自定义的 action，可能用于通过其他 Activity 或服务启动该 PlayerActivity 来播放媒体内容。 -->
-        <action android:name="com.google.android.exoplayer.demo.action.VIEW"/>
+
         <!-- android:category 属性: 指定该过滤器可以响应的 Intent 的 category。 -->
         <!-- 这里值为 android.intent.category.DEFAULT，表示该过滤器可以响应任何没有指定 category 的 Intent。 -->
-        <category android:name="android.intent.category.DEFAULT"/>
+
         <!-- data 标签: 指定该过滤器可以响应的 Intent 的 data 部分。 -->
         <!-- 这里使用了 5 个 data 标签，分别匹配 http、https、content、asset 和 file scheme 的 URI。 -->
         <!-- 这意味着该 Activity 可以用于播放网络流媒体 (http/https)、本地文件 (file) 以及内容提供商 (content) 和应用内部资源 (asset) 中的媒体内容。 -->
+    <activity android:name=".PlayerActivity"
+        android:configChanges="keyboard|keyboardHidden|orientation|screenSize|screenLayout|smallestScreenSize|uiMode"
+        android:launchMode="singleTop"
+        android:label="@string/application_name"
+        android:theme="@style/PlayerTheme"
+        android:exported="true">
+      <intent-filter>
+        <action android:name="com.google.android.exoplayer.demo.action.VIEW"/>
+        <category android:name="android.intent.category.DEFAULT"/>
         <data android:scheme="http"/>
         <data android:scheme="https"/>
         <data android:scheme="content"/>
