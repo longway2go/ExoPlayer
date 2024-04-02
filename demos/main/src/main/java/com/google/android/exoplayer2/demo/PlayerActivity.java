@@ -54,6 +54,7 @@ import com.google.android.exoplayer2.util.DebugTextViewHelper;
 import com.google.android.exoplayer2.util.ErrorMessageProvider;
 import com.google.android.exoplayer2.util.EventLogger;
 import com.google.android.exoplayer2.util.Util;
+import com.google.android.exoplayer2.util.Log;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -72,6 +73,7 @@ public class PlayerActivity extends AppCompatActivity
     implements OnClickListener, StyledPlayerView.ControllerVisibilityListener {
 
   // Saved instance state keys.
+  private static final String TAG = "[Bob] PlayerActivity";
 
   private static final String KEY_TRACK_SELECTION_PARAMETERS = "track_selection_parameters";
   private static final String KEY_SERVER_SIDE_ADS_LOADER_STATE = "server_side_ads_loader_state";
@@ -112,6 +114,7 @@ public class PlayerActivity extends AppCompatActivity
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+    Log.i(TAG, "onCreate");
     dataSourceFactory = DemoUtil.getDataSourceFactory(/* context= */ this);
 
     setContentView();
@@ -142,6 +145,7 @@ public class PlayerActivity extends AppCompatActivity
   @Override
   public void onNewIntent(Intent intent) {
     super.onNewIntent(intent);
+    Log.i(TAG, "onNewIntent");
     releasePlayer();
     releaseClientSideAdsLoader();
     clearStartPosition();
@@ -151,6 +155,7 @@ public class PlayerActivity extends AppCompatActivity
   @Override
   public void onStart() {
     super.onStart();
+    Log.i(TAG, "onStart");
     if (Build.VERSION.SDK_INT > 23) {
       initializePlayer();
       if (playerView != null) {
@@ -162,6 +167,7 @@ public class PlayerActivity extends AppCompatActivity
   @Override
   public void onResume() {
     super.onResume();
+    Log.i(TAG, "onResume");
     if (Build.VERSION.SDK_INT <= 23 || player == null) {
       initializePlayer();
       if (playerView != null) {
@@ -173,6 +179,7 @@ public class PlayerActivity extends AppCompatActivity
   @Override
   public void onPause() {
     super.onPause();
+    Log.i(TAG, "onPause");
     if (Build.VERSION.SDK_INT <= 23) {
       if (playerView != null) {
         playerView.onPause();
@@ -184,6 +191,7 @@ public class PlayerActivity extends AppCompatActivity
   @Override
   public void onStop() {
     super.onStop();
+    Log.i(TAG, "onStop");
     if (Build.VERSION.SDK_INT > 23) {
       if (playerView != null) {
         playerView.onPause();
@@ -195,6 +203,7 @@ public class PlayerActivity extends AppCompatActivity
   @Override
   public void onDestroy() {
     super.onDestroy();
+    Log.i(TAG, "onDestroy");
     releaseClientSideAdsLoader();
   }
 
@@ -202,6 +211,7 @@ public class PlayerActivity extends AppCompatActivity
   public void onRequestPermissionsResult(
       int requestCode, String[] permissions, int[] grantResults) {
     super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+    Log.i(TAG, "onRequestPermissionsResult");
     if (grantResults.length == 0) {
       // Empty results are triggered if a permission is requested while another request was already
       // pending and can be safely ignored in this case.
@@ -218,6 +228,7 @@ public class PlayerActivity extends AppCompatActivity
   @Override
   public void onSaveInstanceState(Bundle outState) {
     super.onSaveInstanceState(outState);
+    Log.i(TAG, "onSaveInstanceState");
     updateTrackSelectorParameters();
     updateStartPosition();
     outState.putBundle(KEY_TRACK_SELECTION_PARAMETERS, trackSelectionParameters.toBundle());
@@ -232,6 +243,7 @@ public class PlayerActivity extends AppCompatActivity
   @Override
   public boolean dispatchKeyEvent(KeyEvent event) {
     // See whether the player view wants to handle media or DPAD keys events.
+    Log.i(TAG, "dispatchKeyEvent", event);
     return playerView.dispatchKeyEvent(event) || super.dispatchKeyEvent(event);
   }
 
@@ -242,6 +254,7 @@ public class PlayerActivity extends AppCompatActivity
     if (view == selectTracksButton
         && !isShowingTrackSelectionDialog
         && TrackSelectionDialog.willHaveContent(player)) {
+      Log.i(TAG, "onClick");
       isShowingTrackSelectionDialog = true;
       TrackSelectionDialog trackSelectionDialog =
           TrackSelectionDialog.createForPlayer(
@@ -255,12 +268,14 @@ public class PlayerActivity extends AppCompatActivity
 
   @Override
   public void onVisibilityChanged(int visibility) {
+    Log.i(TAG, "onVisibilityChanged");
     debugRootView.setVisibility(visibility);
   }
 
   // Internal methods
 
   protected void setContentView() {
+    Log.i(TAG, "setContentView");
     setContentView(R.layout.player_activity);
   }
 
@@ -268,6 +283,7 @@ public class PlayerActivity extends AppCompatActivity
    * @return Whether initialization was successful.
    */
   protected boolean initializePlayer() {
+    Log.i(TAG, "initializePlayer");
     if (player == null) {
       Intent intent = getIntent();
 
@@ -304,6 +320,7 @@ public class PlayerActivity extends AppCompatActivity
   }
 
   private MediaSource.Factory createMediaSourceFactory() {
+    Log.i(TAG, "createMediaSourceFactory");
     DefaultDrmSessionManagerProvider drmSessionManagerProvider =
         new DefaultDrmSessionManagerProvider();
     drmSessionManagerProvider.setDrmHttpDataSourceFactory(
@@ -329,16 +346,19 @@ public class PlayerActivity extends AppCompatActivity
 
   private void setRenderersFactory(
       ExoPlayer.Builder playerBuilder, boolean preferExtensionDecoders) {
+    Log.i(TAG, "setRenderersFactory");
     RenderersFactory renderersFactory =
         DemoUtil.buildRenderersFactory(/* context= */ this, preferExtensionDecoders);
     playerBuilder.setRenderersFactory(renderersFactory);
   }
 
   private void configurePlayerWithServerSideAdsLoader() {
+    Log.i(TAG, "configurePlayerWithServerSideAdsLoader");
     serverSideAdsLoader.setPlayer(player);
   }
 
   private List<MediaItem> createMediaItems(Intent intent) {
+    Log.i(TAG, "createMediaItems");
     String action = intent.getAction();
     boolean actionIsListView = IntentUtil.ACTION_VIEW_LIST.equals(action);
     if (!actionIsListView && !IntentUtil.ACTION_VIEW.equals(action)) {
@@ -379,6 +399,7 @@ public class PlayerActivity extends AppCompatActivity
   }
 
   private AdsLoader getClientSideAdsLoader(MediaItem.AdsConfiguration adsConfiguration) {
+    Log.i(TAG, "getClientSideAdsLoader");
     // The ads loader is reused for multiple playbacks, so that ad playback can resume.
     if (clientSideAdsLoader == null) {
       clientSideAdsLoader = new ImaAdsLoader.Builder(/* context= */ this).build();
@@ -388,6 +409,7 @@ public class PlayerActivity extends AppCompatActivity
   }
 
   protected void releasePlayer() {
+    Log.i(TAG, "releasePlayer");
     if (player != null) {
       updateTrackSelectorParameters();
       updateStartPosition();
@@ -407,11 +429,13 @@ public class PlayerActivity extends AppCompatActivity
   }
 
   private void releaseServerSideAdsLoader() {
+    Log.i(TAG, "releaseServerSideAdsLoader");
     serverSideAdsLoaderState = serverSideAdsLoader.release();
     serverSideAdsLoader = null;
   }
 
   private void releaseClientSideAdsLoader() {
+    Log.i(TAG, "releaseClientSideAdsLoader");
     if (clientSideAdsLoader != null) {
       clientSideAdsLoader.release();
       clientSideAdsLoader = null;
@@ -420,12 +444,14 @@ public class PlayerActivity extends AppCompatActivity
   }
 
   private void saveServerSideAdsLoaderState(Bundle outState) {
+    Log.i(TAG, "saveServerSideAdsLoaderState");
     if (serverSideAdsLoaderState != null) {
       outState.putBundle(KEY_SERVER_SIDE_ADS_LOADER_STATE, serverSideAdsLoaderState.toBundle());
     }
   }
 
   private void restoreServerSideAdsLoaderState(Bundle savedInstanceState) {
+    Log.i(TAG, "restoreServerSideAdsLoaderState");
     Bundle adsLoaderStateBundle = savedInstanceState.getBundle(KEY_SERVER_SIDE_ADS_LOADER_STATE);
     if (adsLoaderStateBundle != null) {
       serverSideAdsLoaderState =
@@ -435,12 +461,14 @@ public class PlayerActivity extends AppCompatActivity
   }
 
   private void updateTrackSelectorParameters() {
+    Log.i(TAG, "updateTrackSelectorParameters");
     if (player != null) {
       trackSelectionParameters = player.getTrackSelectionParameters();
     }
   }
 
   private void updateStartPosition() {
+    Log.i(TAG, "updateStartPosition");
     if (player != null) {
       startAutoPlay = player.getPlayWhenReady();
       startItemIndex = player.getCurrentMediaItemIndex();
@@ -449,6 +477,7 @@ public class PlayerActivity extends AppCompatActivity
   }
 
   protected void clearStartPosition() {
+    Log.i(TAG, "clearStartPosition");
     startAutoPlay = true;
     startItemIndex = C.INDEX_UNSET;
     startPosition = C.TIME_UNSET;
@@ -457,18 +486,22 @@ public class PlayerActivity extends AppCompatActivity
   // User controls
 
   private void updateButtonVisibility() {
+    Log.i(TAG, "updateButtonVisibility");
     selectTracksButton.setEnabled(player != null && TrackSelectionDialog.willHaveContent(player));
   }
 
   private void showControls() {
+    Log.i(TAG, "showControls");
     debugRootView.setVisibility(View.VISIBLE);
   }
 
   private void showToast(int messageId) {
+    Log.i(TAG, "showToast");
     showToast(getString(messageId));
   }
 
   private void showToast(String message) {
+    Log.i(TAG, "showToast", message);
     Toast.makeText(getApplicationContext(), message, Toast.LENGTH_LONG).show();
   }
 
