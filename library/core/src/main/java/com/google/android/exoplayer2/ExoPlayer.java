@@ -61,6 +61,7 @@ import com.google.android.exoplayer2.util.Clock;
 import com.google.android.exoplayer2.util.Effect;
 import com.google.android.exoplayer2.util.PriorityTaskManager;
 import com.google.android.exoplayer2.util.Util;
+import com.google.android.exoplayer2.util.Log;
 import com.google.android.exoplayer2.video.MediaCodecVideoRenderer;
 import com.google.android.exoplayer2.video.VideoFrameMetadataListener;
 import com.google.android.exoplayer2.video.VideoSize;
@@ -163,6 +164,7 @@ import java.util.List;
 @Deprecated
 public interface ExoPlayer extends Player {
 
+  private static final String TAG = "[Bob] ExoPlayer";
   /**
    * @deprecated Use {@link ExoPlayer}, as the {@link AudioComponent} methods are defined by that
    *     interface.
@@ -710,6 +712,7 @@ public interface ExoPlayer extends Player {
      */
     @CanIgnoreReturnValue
     public Builder setRenderersFactory(RenderersFactory renderersFactory) {
+      Log.i(TAG,  "setRenderersFactory");
       checkState(!buildCalled);
       checkNotNull(renderersFactory);
       this.renderersFactorySupplier = () -> renderersFactory;
@@ -725,6 +728,7 @@ public interface ExoPlayer extends Player {
      */
     @CanIgnoreReturnValue
     public Builder setMediaSourceFactory(MediaSource.Factory mediaSourceFactory) {
+      Log.i(TAG, "setMediaSourceFactory");
       checkState(!buildCalled);
       checkNotNull(mediaSourceFactory);
       this.mediaSourceFactorySupplier = () -> mediaSourceFactory;

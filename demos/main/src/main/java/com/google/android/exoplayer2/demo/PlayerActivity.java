@@ -111,6 +111,7 @@ public class PlayerActivity extends AppCompatActivity
 
   // Activity lifecycle.
 
+  // 系统会创建PlayerActivity实例，并执行其生命周期方法onCreate()
   @Override
   public void onCreate(@Nullable Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -123,6 +124,7 @@ public class PlayerActivity extends AppCompatActivity
     selectTracksButton = findViewById(R.id.select_tracks_button);
     selectTracksButton.setOnClickListener(this);
 
+    // 或去playerView实例，并将其聚焦
     playerView = findViewById(R.id.player_view);
     playerView.setControllerVisibilityListener(this);
     playerView.setErrorMessageProvider(new PlayerErrorMessageProvider());
@@ -285,8 +287,10 @@ public class PlayerActivity extends AppCompatActivity
   protected boolean initializePlayer() {
     Log.i(TAG, "initializePlayer");
     if (player == null) {
+      // 获取Intent对象，包含了action、data等信息。
       Intent intent = getIntent();
 
+      // 根据Intent创建mediaItems
       mediaItems = createMediaItems(intent);
       if (mediaItems.isEmpty()) {
         return false;
@@ -371,6 +375,7 @@ public class PlayerActivity extends AppCompatActivity
         createMediaItems(intent, DemoUtil.getDownloadTracker(/* context= */ this));
     for (int i = 0; i < mediaItems.size(); i++) {
       MediaItem mediaItem = mediaItems.get(i);
+      Log.i(TAG, "mediaItem: " + mediaItem.toString());
 
       if (!Util.checkCleartextTrafficPermitted(mediaItem)) {
         showToast(R.string.error_cleartext_not_permitted);

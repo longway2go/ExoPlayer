@@ -28,6 +28,7 @@ import com.google.android.exoplayer2.MediaItem.ClippingConfiguration;
 import com.google.android.exoplayer2.MediaItem.SubtitleConfiguration;
 import com.google.android.exoplayer2.MediaMetadata;
 import com.google.android.exoplayer2.util.Util;
+import com.google.android.exoplayer2.util.Log;
 import com.google.common.collect.ImmutableList;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -46,6 +47,7 @@ import java.util.UUID;
 @Deprecated
 public class IntentUtil {
 
+  private static final String TAG = "[Bob] IntentUtil";
   // Actions.
 
   public static final String ACTION_VIEW = "com.google.android.exoplayer.demo.action.VIEW";
@@ -131,6 +133,7 @@ public class IntentUtil {
     @Nullable
     SubtitleConfiguration subtitleConfiguration =
         createSubtitleConfiguration(intent, extrasKeySuffix);
+    Log.i(TAG, "createMediaItemFromIntent. uri: " + uri.toString());
     MediaItem.Builder builder =
         new MediaItem.Builder()
             .setUri(uri)

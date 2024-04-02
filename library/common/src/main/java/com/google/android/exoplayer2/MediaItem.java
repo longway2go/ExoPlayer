@@ -26,6 +26,7 @@ import com.google.android.exoplayer2.offline.StreamKey;
 import com.google.android.exoplayer2.util.Assertions;
 import com.google.android.exoplayer2.util.BundleableUtil;
 import com.google.android.exoplayer2.util.Util;
+import com.google.android.exoplayer2.util.Log;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.errorprone.annotations.CanIgnoreReturnValue;
@@ -48,6 +49,8 @@ import java.util.UUID;
 @Deprecated
 public final class MediaItem implements Bundleable {
 
+  private static final String TAG = "[Bob] MediaItem";
+
   /**
    * Creates a {@link MediaItem} for the given URI.
    *
@@ -55,6 +58,7 @@ public final class MediaItem implements Bundleable {
    * @return An {@link MediaItem} for the given URI.
    */
   public static MediaItem fromUri(String uri) {
+    Log.d(TAG, "fromUri: " + uri);
     return new MediaItem.Builder().setUri(uri).build();
   }
 
